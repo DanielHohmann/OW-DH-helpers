@@ -2,7 +2,13 @@
 
 export(EIOPA_RFR)
 export(FileWriter)
+export(SQLdb)
+export(YieldCurve)
+importFrom(DBI,dbConnect)
+importFrom(DBI,dbDisconnect)
+importFrom(DBI,dbListTables)
 importFrom(R6,R6Class)
+importFrom(RSQLite,SQLite)
 importFrom(data.table,as.data.table)
 importFrom(dplyr,"%>%")
 importFrom(dplyr,group_by)
