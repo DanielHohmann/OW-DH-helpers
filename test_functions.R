@@ -19,21 +19,35 @@ yc$zcb_out(1:30)
 
 # SQLdb ----
 
+library(dplyr)
+library(dbplyr)
+library(DBI)
+library(tibble)
+
 db = SQLdb$new("test.db")
 
-db2$listTables()
+db$listTables()
 
 db_ = db$.__enclos_env__$private$database
 
-x = data.frame(a = rnorm(1:10), b = rnorm(1:10))
-DBI::dbWriteTable(db_, "normalRNs", x)
 
-DBI::dbListTables(db2$.__enclos_env__$private$database)
-DBI::dbDisconnect(db_)
-dbplyr::tbl
-db
-library(dbplyr)
-tbl_sql("normalRNs", db_)
-c = dplyr::tbl(db_, "normalRNs")
-c %>% mutate(c = a+b)
-library(dplyr)
+class(dbReadTable(db_, "normalRNs"))
+for(k in 1:50) {
+  db_ %>% dbWriteTable(
+    "X",
+    tibble(x = rnorm(10000000)),
+    append = TRUE
+  )
+}
+
+db_ %>% dbReadTable("X")
+X = db_ %>% tbl("X")
+f = function(y) y < 0
+X %>% mutate(y = x < 0) %>% summarize(Sum = sum(y)) %>% show_query()
+X %>% summarize(n()) %>% collect()
+db_ %>% dbGetQuery(
+  "SELECT x, x < 0 as y FROM X LIMIT 10"
+)
+f(2)
+X %>% summarize(n())
+
