@@ -129,14 +129,15 @@ YieldCurve = R6Class(
     },
     
     
-    #' @description Calculate spot rates for a given vector of terms given
-    #' the price function calibration
+    
+    #' @description Calculate zero coupon bond prices for a given vector of 
+    #' terms given the price function calibration
     #' @param terms An integer vector specifying the terms
     #' @return A double vector
     
-    spot_rates = function(terms) {
+    ZCB = function(terms) {
       
-      if(is.na(private$zeta))
+      if(is.null(private$zeta))
         stop("Price function not calibrated yet")
       
       N = length(private$terms)
@@ -148,8 +149,34 @@ YieldCurve = R6Class(
                              private$UFR)
       }
       zcb_out = as.numeric(exp(-private$UFR * terms) + Y %*% private$zeta)
+      return(zcb_out)
+    },
+    
+    
+    
+    #' @description Calculate spot rates for a given vector of terms given
+    #' the price function calibration
+    #' @param terms An integer vector specifying the terms
+    #' @return A double vector
+    
+    SpotRates = function(terms) {
+      
+      if(is.null(private$zeta))
+        stop("Price function not calibrated yet")
+      
+      zcb_out = self$ZCB(terms)
       spot_out = zcb_out ^ (-1 / terms) - 1
       return(spot_out)
+    },
+    
+    
+    
+    #' @description Return the current alpha parameter
+    #' @return A double value
+    
+    get_alpha = function() {
+      if(is.na(private$alpha)) warning("Price function not calibrated yet")
+      return(private$alpha)
     }
     
   ),
@@ -162,7 +189,7 @@ YieldCurve = R6Class(
     zcb = NULL,
     UFR = NA,
     alpha = NA,
-    zeta = NA,
+    zeta = NULL,
     
     Wil = function(t, u, alpha = 0.2, UFR = 0.042) {
       res = sapply(t, function(y) exp(-UFR * (y + u)) * 

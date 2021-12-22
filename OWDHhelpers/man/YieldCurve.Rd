@@ -20,7 +20,9 @@ Daniel Hohmann
 \item \href{#method-new}{\code{YieldCurve$new()}}
 \item \href{#method-print}{\code{YieldCurve$print()}}
 \item \href{#method-calibrate_price_function}{\code{YieldCurve$calibrate_price_function()}}
-\item \href{#method-spot_rates}{\code{YieldCurve$spot_rates()}}
+\item \href{#method-ZCB}{\code{YieldCurve$ZCB()}}
+\item \href{#method-SpotRates}{\code{YieldCurve$SpotRates()}}
+\item \href{#method-get_alpha}{\code{YieldCurve$get_alpha()}}
 \item \href{#method-clone}{\code{YieldCurve$clone()}}
 }
 }
@@ -107,13 +109,13 @@ alpha is to be optimized}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-spot_rates"></a>}}
-\if{latex}{\out{\hypertarget{method-spot_rates}{}}}
-\subsection{Method \code{spot_rates()}}{
-Calculate spot rates for a given vector of terms given
-the price function calibration
+\if{html}{\out{<a id="method-ZCB"></a>}}
+\if{latex}{\out{\hypertarget{method-ZCB}{}}}
+\subsection{Method \code{ZCB()}}{
+Calculate zero coupon bond prices for a given vector of
+terms given the price function calibration
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{YieldCurve$spot_rates(terms)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{YieldCurve$ZCB(terms)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -125,6 +127,40 @@ the price function calibration
 }
 \subsection{Returns}{
 A double vector
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-SpotRates"></a>}}
+\if{latex}{\out{\hypertarget{method-SpotRates}{}}}
+\subsection{Method \code{SpotRates()}}{
+Calculate spot rates for a given vector of terms given
+the price function calibration
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{YieldCurve$SpotRates(terms)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{terms}}{An integer vector specifying the terms}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A double vector
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_alpha"></a>}}
+\if{latex}{\out{\hypertarget{method-get_alpha}{}}}
+\subsection{Method \code{get_alpha()}}{
+Return the current alpha parameter
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{YieldCurve$get_alpha()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+A double value
 }
 }
 \if{html}{\out{<hr>}}

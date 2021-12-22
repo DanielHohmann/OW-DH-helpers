@@ -4,3 +4,5 @@
 .Ruserdata
 *.Rproj
 .DS_Store
+01_Input/
+02_Output/

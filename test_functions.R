@@ -2,19 +2,33 @@
 
 # Test functions
 
-library(OWDHhelpers)
+#library(OWDHhelpers)
 
+devtools::load_all("OWDHhelpers")
 
 
 # YieldCurve ----
 
-yc = YieldCurve$new(terms = c(5, 10, 20),
-                    spotrates = c(.008, .01, .012))
-yc$calibrate_price_function(alpha_search = TRUE)
-yc$.__enclos_env__$private$alpha
-yc$.__enclos_env__$private$zeta
-yc$zcb_out(1:30)
+library(readr)
 
+input = read_csv("01_Input\\spot_input.csv")
+terms = c(1:10, 12, 15, 20)
+spots = input$SPOT[terms]
+UFR = 0.036
+alpha =  0.131942
+
+yc = YieldCurve$new(terms = terms,
+                    spotrates = spots)
+
+yc$get_alpha()
+yc$calibrate_price_function(alpha = alpha,
+                            UFR = UFR)
+yc$calibrate_price_function(alpha = 0.5,
+                            UFR = UFR,
+                            alpha_search = TRUE)
+
+yc$SpotRates(1:150)
+yc$ZCB(1:150)
 
 
 # SQLdb ----
