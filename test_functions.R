@@ -35,33 +35,49 @@ yc$ZCB(1:150)
 
 library(dplyr)
 library(dbplyr)
+library(tidyr)
 library(DBI)
 library(tibble)
 
-db = SQLdb$new("test.db")
+db = SQLdb$new("02_Output\\test.db")
 
 db$listTables()
+db$getQuery("select SIMULATION, ASSET from (select SIMULATION, ASSET from simulations left join assets on SIMULATION = ASSET) where ASSET is null limit 5")
+x = db$getQuery("select SIMULATION, ASSET from simulations left join assets on SIMULATION = ASSET")
 
-db_ = db$.__enclos_env__$private$database
 
+x %>% filter(is.na(ASSET))
 
-class(dbReadTable(db_, "normalRNs"))
-for(k in 1:50) {
-  db_ %>% dbWriteTable(
+for(k in 1:5) {
+  db$writeTable(
     "X",
-    tibble(x = rnorm(10000000)),
-    append = TRUE
+    tibble(x = rnorm(10000000))
   )
 }
 
-db_ %>% dbReadTable("X")
-X = db_ %>% tbl("X")
-f = function(y) y < 0
-X %>% mutate(y = x < 0) %>% summarize(Sum = sum(y)) %>% show_query()
-X %>% summarize(n()) %>% collect()
-db_ %>% dbGetQuery(
-  "SELECT x, x < 0 as y FROM X LIMIT 10"
-)
-f(2)
+
+X = db$getTableReference("Assets")
 X %>% summarize(n())
+
+
+db_ %>% dbWriteTable(
+  "Simulations",
+  tibble(SIMULATION = 1:100000)
+)
+
+db_ %>% dbWriteTable(
+  "Assets",
+  tibble(ASSET = 1:4000)
+)
+
+db$disconnect()
+
+db_ %>% dbExecute("CREATE TABLE Combinations AS SELECT * FROM Simulations CROSS JOIN Assets")
+
+db$execute("
+           SELECT * 
+           FROM Assets
+           ")
+C = db$getTableReference("Combinations")
+dplyr::filter(C, ASSET == 2)
 

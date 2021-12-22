@@ -18,6 +18,12 @@ Daniel Hohmann
 \itemize{
 \item \href{#method-new}{\code{SQLdb$new()}}
 \item \href{#method-listTables}{\code{SQLdb$listTables()}}
+\item \href{#method-writeTable}{\code{SQLdb$writeTable()}}
+\item \href{#method-readTable}{\code{SQLdb$readTable()}}
+\item \href{#method-getTableReference}{\code{SQLdb$getTableReference()}}
+\item \href{#method-removeTable}{\code{SQLdb$removeTable()}}
+\item \href{#method-execute}{\code{SQLdb$execute()}}
+\item \href{#method-getQuery}{\code{SQLdb$getQuery()}}
 \item \href{#method-disconnect}{\code{SQLdb$disconnect()}}
 \item \href{#method-clone}{\code{SQLdb$clone()}}
 }
@@ -26,7 +32,8 @@ Daniel Hohmann
 \if{html}{\out{<a id="method-new"></a>}}
 \if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
-Open the database connection. A new data will be created in case dbpath is not an existing one
+Open the database connection. A new database will be created
+in case dbpath is not an existing one
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{SQLdb$new(dbpath)}\if{html}{\out{</div>}}
 }
@@ -50,6 +57,130 @@ List all tables in the database
 
 \subsection{Returns}{
 A string giving the table names
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-writeTable"></a>}}
+\if{latex}{\out{\hypertarget{method-writeTable}{}}}
+\subsection{Method \code{writeTable()}}{
+Write a new table to the database
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{SQLdb$writeTable(tableName, data, append = TRUE)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{tableName}}{A string specifying the name of the new or existing
+table}
+
+\item{\code{data}}{A \code{\link[tibble:tbl_df-class]{tibble}} specifying the
+data to be written to the database}
+
+\item{\code{append}}{A boolean specifying whether the new data should be
+appended in case the table already exists}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-readTable"></a>}}
+\if{latex}{\out{\hypertarget{method-readTable}{}}}
+\subsection{Method \code{readTable()}}{
+Read a table from the database
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{SQLdb$readTable(tableName)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{tableName}}{A string specifying the name of the table}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A \code{\link[tibble:tbl_df-class]{tibble}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-getTableReference"></a>}}
+\if{latex}{\out{\hypertarget{method-getTableReference}{}}}
+\subsection{Method \code{getTableReference()}}{
+Return a reference to an SQL table
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{SQLdb$getTableReference(tableName)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{tableName}}{A string specifying the name of the table}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A \code{tbl_SQLiteConnection} object
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-removeTable"></a>}}
+\if{latex}{\out{\hypertarget{method-removeTable}{}}}
+\subsection{Method \code{removeTable()}}{
+Remove a table from the database
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{SQLdb$removeTable(tableName)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{tableName}}{A string specifying the name of the table}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-execute"></a>}}
+\if{latex}{\out{\hypertarget{method-execute}{}}}
+\subsection{Method \code{execute()}}{
+Execute an SQL statement in the database
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{SQLdb$execute(sqlStatement, silent = TRUE)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{sqlStatement}}{A string specifying the statement}
+
+\item{\code{silent}}{A boolean specifying if the result should be printed}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+An integer giving the number of affected rows
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-getQuery"></a>}}
+\if{latex}{\out{\hypertarget{method-getQuery}{}}}
+\subsection{Method \code{getQuery()}}{
+Execute an SQL query in the database and retrieve the
+resulting table
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{SQLdb$getQuery(sqlStatement)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{sqlStatement}}{A string specifying the query}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A \code{\link[tibble:tbl_df-class]{tibble}}
 }
 }
 \if{html}{\out{<hr>}}
