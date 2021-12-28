@@ -39,14 +39,10 @@ library(tidyr)
 library(DBI)
 library(tibble)
 
-db = SQLdb$new("02_Output\\test.db")
+db = SQLdb$new(file.path("02_Output", "test.db"))
 
 db$listTables()
-db$getQuery("select SIMULATION, ASSET from (select SIMULATION, ASSET from simulations left join assets on SIMULATION = ASSET) where ASSET is null limit 5")
-x = db$getQuery("select SIMULATION, ASSET from simulations left join assets on SIMULATION = ASSET")
 
-
-x %>% filter(is.na(ASSET))
 
 for(k in 1:5) {
   db$writeTable(
@@ -60,19 +56,19 @@ X = db$getTableReference("Assets")
 X %>% summarize(n())
 
 
-db_ %>% dbWriteTable(
+db$writeTable(
   "Simulations",
   tibble(SIMULATION = 1:100000)
 )
 
-db_ %>% dbWriteTable(
+db$writeTable(
   "Assets",
   tibble(ASSET = 1:4000)
 )
 
 db$disconnect()
 
-db_ %>% dbExecute("CREATE TABLE Combinations AS SELECT * FROM Simulations CROSS JOIN Assets")
+db$execute("CREATE TABLE Combinations AS SELECT * FROM Simulations CROSS JOIN Assets")
 
 db$execute("
            SELECT * 
@@ -81,3 +77,43 @@ db$execute("
 C = db$getTableReference("Combinations")
 dplyr::filter(C, ASSET == 2)
 
+assets = db$getTableReference("Assets")
+sims = db$getTableReference("Simulations")
+combis = db$getTableReference("CombisShort")
+qu = combis %>% mutate(Val = 3) %>% 
+  pivot_wider(names_from = "ASSET", values_from = "Val") %>% 
+  dplyr::show_query()
+
+
+db$execute("CREATE VIEW Combi3 AS SELECT * FROM Combinations WHERE SIMULATION = 3")
+db$execute("DROP VIEW Combi3")
+db$listTables()
+
+# Glue ----
+
+library(glue)
+
+?glue_sql
+name = "Daniel"
+
+glue_sql("SELECT * from data where Name = {name}")
+
+glue(
+  "SELECT {name} FROM {name}"
+)
+
+db_ = db$.__enclos_env__$private$database
+fr = "Combinations"
+sel = c("SIMULATION", "ASSET")
+choice = 5
+wh = "SIMULATION = 3"
+
+ss = glue_sql_collapse(glue_sql("{`sel`}", .con = db_), sep = ", ")
+ss
+qu = glue_sql("SELECT {sel} FROM {fr} WHERE `SIMULATION` = {choice}", .con = db_)
+qu = glue_sql("SELECT {ss} FROM {fr} WHERE {wh} LIMIT 3", .con = db_)
+qu
+
+db$getQuery(qu)
+db$getQuery(glue("SELECT {sel} FROM {fr}"))
+db$getSelectQuery(sel, "Combinations")

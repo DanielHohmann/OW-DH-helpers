@@ -12,6 +12,7 @@ RoxygenNote: 7.1.2
 Imports:
     DBI,
     dplyr,
+    glue,
     openxlsx,
     R6,
     readr,

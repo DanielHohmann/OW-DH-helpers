@@ -9,6 +9,7 @@
 #' dbRemoveTable dbExecute dbGetQuery
 #' @importFrom dplyr "%>%" tbl
 #' @importFrom tibble tibble
+#' @importFrom glue glue_sql glue_sql_collapse
 #' @export
 #' @format An \code{\link{R6Class}} generator object
 
@@ -117,7 +118,31 @@ SQLdb = R6Class(
       
       private$database %>% 
         dbGetQuery(sqlStatement) %>% 
-        tibble()
+        tibble() %>% 
+        return()
+    },
+    
+    
+    
+    #' @description Execute an SELECT SQL query in the database and retrieve the
+    #' resulting table
+    #' @param select A character vector being passed to the SELECT argument
+    #' @param from A character being passed to the FROM argument
+    #' @return A \code{\link[tibble:tbl_df-class]{tibble}}
+    
+    getSelectQuery = function(select, from) {
+      
+      select_sql = glue_sql_collapse(
+        glue_sql("{`select`}", .con = private$database), 
+        sep = ", "
+      )
+      query = glue_sql(
+        "SELECT {select_sql} FROM {`from`}",
+        .con = private$database
+      )
+
+      self$getQuery(query) %>% 
+        return()
     },
     
     

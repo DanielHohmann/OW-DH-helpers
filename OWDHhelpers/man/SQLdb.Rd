@@ -24,6 +24,7 @@ Daniel Hohmann
 \item \href{#method-removeTable}{\code{SQLdb$removeTable()}}
 \item \href{#method-execute}{\code{SQLdb$execute()}}
 \item \href{#method-getQuery}{\code{SQLdb$getQuery()}}
+\item \href{#method-getSelectQuery}{\code{SQLdb$getSelectQuery()}}
 \item \href{#method-disconnect}{\code{SQLdb$disconnect()}}
 \item \href{#method-clone}{\code{SQLdb$clone()}}
 }
@@ -176,6 +177,29 @@ resulting table
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{sqlStatement}}{A string specifying the query}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A \code{\link[tibble:tbl_df-class]{tibble}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-getSelectQuery"></a>}}
+\if{latex}{\out{\hypertarget{method-getSelectQuery}{}}}
+\subsection{Method \code{getSelectQuery()}}{
+Execute an SELECT SQL query in the database and retrieve the
+resulting table
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{SQLdb$getSelectQuery(select, from)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{select}}{A character vector being passed to the SELECT argument}
+
+\item{\code{from}}{A character being passed to the FROM argument}
 }
 \if{html}{\out{</div>}}
 }
