@@ -48,14 +48,17 @@ SQLdb = R6Class(
     #' @param data A \code{\link[tibble:tbl_df-class]{tibble}} specifying the
     #' data to be written to the database
     #' @param append A boolean specifying whether the new data should be
-    #' appended in case the table already exists
+    #' appended in case the table already exists (default is TRUE)
+    #' @param overwrite A boolean specifying whether the table should be
+    #' overwritten in case in already exists (default is !append)
     
-    writeTable = function(tableName, data, append = TRUE) {
+    writeTable = function(tableName, data, append = TRUE, overwrite = !append) {
       private$database %>% 
         dbWriteTable(
           tableName,
           data,
-          append = append
+          append = append,
+          overwrite = overwrite
         )
     },
     

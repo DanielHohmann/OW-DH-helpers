@@ -44,13 +44,14 @@ db = SQLdb$new(file.path("02_Output", "test.db"))
 db$listTables()
 
 
-for(k in 1:5) {
+for(k in 1:2) {
   db$writeTable(
     "X",
-    tibble(x = rnorm(10000000))
+    tibble(x = rnorm(2)),
+    append = FALSE
   )
 }
-
+db$readTable("X")
 
 X = db$getTableReference("Assets")
 X %>% summarize(n())

@@ -66,7 +66,7 @@ A string giving the table names
 \subsection{Method \code{writeTable()}}{
 Write a new table to the database
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{SQLdb$writeTable(tableName, data, append = TRUE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{SQLdb$writeTable(tableName, data, append = TRUE, overwrite = !append)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -79,7 +79,10 @@ table}
 data to be written to the database}
 
 \item{\code{append}}{A boolean specifying whether the new data should be
-appended in case the table already exists}
+appended in case the table already exists (default is TRUE)}
+
+\item{\code{overwrite}}{A boolean specifying whether the table should be
+overwritten in case in already exists (default is !append)}
 }
 \if{html}{\out{</div>}}
 }
