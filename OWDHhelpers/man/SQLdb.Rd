@@ -82,7 +82,7 @@ data to be written to the database}
 appended in case the table already exists (default is TRUE)}
 
 \item{\code{overwrite}}{A boolean specifying whether the table should be
-overwritten in case in already exists (default is !append)}
+overwritten in case it already exists (default is !append)}
 }
 \if{html}{\out{</div>}}
 }

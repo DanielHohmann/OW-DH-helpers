@@ -50,7 +50,7 @@ SQLdb = R6Class(
     #' @param append A boolean specifying whether the new data should be
     #' appended in case the table already exists (default is TRUE)
     #' @param overwrite A boolean specifying whether the table should be
-    #' overwritten in case in already exists (default is !append)
+    #' overwritten in case it already exists (default is !append)
     
     writeTable = function(tableName, data, append = TRUE, overwrite = !append) {
       private$database %>% 

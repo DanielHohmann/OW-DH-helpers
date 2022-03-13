@@ -19,7 +19,6 @@ alpha =  0.131942
 
 yc = YieldCurve$new(terms = terms,
                     spotrates = spots)
-
 yc$get_alpha()
 yc$calibrate_price_function(alpha = alpha,
                             UFR = UFR)
@@ -118,3 +117,99 @@ qu
 db$getQuery(qu)
 db$getQuery(glue("SELECT {sel} FROM {fr}"))
 db$getSelectQuery(sel, "Combinations")
+
+
+### Cluster
+
+
+library(dplyr)
+library(parallel)
+detectCores()
+
+
+table = tibble(Nr = 1:10)
+
+
+start = Sys.time()
+table2 = table %>% 
+  mutate(data = lapply(Nr, function(n) {
+    M = matrix(1:(1000^2), nrow = 1000) / 1000^2
+    for(i in 1:10)
+      M = M %*% M
+    return(M)
+  }))
+end = Sys.time()
+end - start
+
+
+cl = makeCluster(6)
+clusterEvalQ(cl, {library(dplyr)})
+
+start = Sys.time()
+table3 = table %>% 
+  mutate(data = clusterApply(cl, Nr, function(n) {
+    M = matrix(1:(1000^2), nrow = 1000) / 1000^2
+    for(i in 1:10)
+      M = M %*% M
+    return(M)
+  }))
+end = Sys.time()
+end - start
+
+
+clusterApplyLB(cl, ycs, function(x) x$ZCB(1:1000))
+
+start = Sys.time()
+out1 = lapply(ycs, function(x) x$ZCB(1:100000))
+end = Sys.time()
+end - start
+
+cluster = Cluster$new(6)
+
+cluster$loadPackages(c("readr", "tibble"))
+
+cluster$execute(expr({z = 3}))
+
+cluster$export(list("alpha", "UFR"))
+
+clusterEvalQ(cluster$.__enclos_env__$private$cluster, {z = 3})
+x = expr({z + 1})
+clusterEvalQ(cluster$.__enclos_env__$private$cluster, eval(x))
+
+start = Sys.time()
+out2 = cluster$apply(ycs, function(x) x$calibrate_price_function(alpha = alpha,
+                         UFR = UFR))
+end = Sys.time()
+end - start
+
+
+start = Sys.time()
+out2 = cluster$apply(ycs, function(x) x$ZCB(1:100000))
+end = Sys.time()
+end - start
+
+identical(out1, out2)
+
+cluster$stop()
+
+ycs = list(yc, yc, yc, yc, yc, yc, yc, yc, yc, yc, yc, yc, yc, yc, yc, yc, yc)
+
+calibrate_price_function(alpha = alpha,
+                         UFR = UFR)
+
+z = 10
+clusterExport(cl, list("z"))
+
+clusterEvalQ(cl, {
+  z = z-3
+})
+
+
+clusterApplyLB(cl, 1:10, function(y) y + z)
+
+stopCluster(cl)
+
+
+
+
+
